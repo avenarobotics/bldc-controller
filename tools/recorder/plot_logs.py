@@ -17,9 +17,12 @@ if __name__ == "__main__" :
 
     f, axarr = plt.subplots(2, sharex=True)
 
+    avg_i = [sum(e[0:3])/3.0 for e in data]
+
     axarr[0].plot(range(len(data)), [e[0] for e in data], color='r', label='ia')
     axarr[0].plot(range(len(data)), [e[1] for e in data], color='g', label='ib')
     axarr[0].plot(range(len(data)), [e[2] for e in data], color='b', label='ic')
+    axarr[0].plot(range(len(data)), [e    for e in avg_i], color='k', label='iavg')
     axarr[0].legend(loc='best')
     #axarr[0].set_ylim(-2, 6)
 

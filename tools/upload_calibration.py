@@ -47,7 +47,7 @@ if __name__ == '__main__':
     parser.add_argument('erev_start', type=int, help='Starting erev')
     parser.add_argument('epmrev', type=int, help='Electronic revolutions per magnetic revolution')
     parser.add_argument('flip', type=int, help='Flipped Phases?')
-    parser.set_defaults(baud_rate=COMM_DEFAULT_BAUD_RATE)
+    parser.set_defaults(baud_rate=COMM_DEFAULT_BAUD_RATE, serial="/dev/ttyUSB0", board_id=1, erev_start=0, epmrev=1, flip=0)
     args = parser.parse_args()
 
     ser = serial.Serial(port=args.serial, baudrate=args.baud_rate, timeout=2.0)

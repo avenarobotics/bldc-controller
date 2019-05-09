@@ -7,6 +7,7 @@
 #include "peripherals.h"
 #include "comms.h"
 #include "constants.h"
+#include "helper.h"
 
 namespace motor_driver {
 
@@ -92,5 +93,6 @@ int main(void) {
 
 // FIXME: hack
 int main(void) {
+  flashJumpApplication(0x8008000); // Does not return
   return motor_driver::main();
 }

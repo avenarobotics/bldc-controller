@@ -139,6 +139,9 @@ class BLDCControllerClient:
         ret = self.writeRegisters(server_ids, [0x2002 for sid in server_ids], [1 for sid in server_ids], [struct.pack('<f', val) for val in value])
         return ret
 
+    def setVelocitySetpoint(self, server_ids, value):
+        return self.writeRegisters(server_ids, [0x2007 for sid in server_ids], [1 for sid in server_ids], [struct.pack('<f', val) for val in value])
+
     def setCommandAndGetState(self, server_ids, value):
         ret = self.readWriteRegisters(server_ids, [0x3000 for sid in server_ids], [9 for sid in server_ids], [0x2002 for sid in server_ids], [1 for sid in server_ids], [struct.pack('<f', val) for val in value])
         states = [struct.unpack('<ffffffiii', data) for data in ret]
@@ -230,6 +233,8 @@ class BLDCControllerClient:
     def _readFlashLimitedLength(self, server_id, src_addr, length):
         responses = self.doTransaction(server_id, [COMM_FC_FLASH_READ], [struct.pack('<II', src_addr, length)])[0]
         _, data = responses
+        if data is None:
+            print("Sadness ensues")
         return data
 
     def readCalibration(self, server_id):
@@ -348,13 +353,23 @@ class BLDCControllerClient:
         self._ser.write(datagram)
 
     def readResponse(self, server_id, func_code):
-        sync = self._ser.read()
-        if len(sync) != 1 or sync != "\xff":
+        #sync = self._ser.read()
+        #if len(sync) != 1 or sync != "\xff":
             # Reached maximum number of tries
             # self._ser.flushInput()
-            return False, None
+        #    return False, None
+        # HACKING bc I don't want to rewrite this parser properly
+        while True:
+            sync = self._ser.read()
+            if len(sync) == 0:
+                # Timeout
+                return False, None
+            if sync != '\xff':
+                # This isn't a sync byte, start processing the rest of the packet
+                break
 
-        version = self._ser.read()
+        version = sync
+
         if len(version) != 1 or version != "\xfe":
             # self._ser.flushInput()
             return False, None

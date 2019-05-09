@@ -25,11 +25,11 @@ if __name__ == '__main__':
     # Data collection
     #
 
-    ser = serial.Serial(port=args.serial, baudrate=args.baud_rate, timeout=0.1)
+    ser = serial.Serial(port=args.serial, baudrate=args.baud_rate, timeout=0.5)
     time.sleep(0.1)
 
     client = BLDCControllerClient(ser)
-
+    """
     client.enterBootloader([args.board_id])
     time.sleep(0.2)
     try:
@@ -41,9 +41,9 @@ if __name__ == '__main__':
     client.leaveBootloader([args.board_id])
     time.sleep(0.2) # Wait for the controller to reset
     ser.reset_input_buffer()
-
+    """
     ##### CALIBRATION CODE ######
-    
+    """
     calibration_obj = client.readCalibration([args.board_id])
     
     client.setZeroAngle([args.board_id], [calibration_obj['angle']])
@@ -76,8 +76,9 @@ if __name__ == '__main__':
     
     client.writeRegisters([args.board_id], [0x2006], [1], [struct.pack('<f', args.duty_cycle)])
     client.writeRegisters([args.board_id], [0x2000], [1], [struct.pack('<B', 2)]) # Torque control
+    """
     ##### END CALIBRATION CODE ######
-    
+    client.writeRegisters([args.board_id], [0x2000], [1], [struct.pack('<B', 6)])  # Open Loop Spin Control
     
     # The number of values returned by the recorder (all floats)
     num_recorder_elements = 11
@@ -89,19 +90,30 @@ if __name__ == '__main__':
     
     time.sleep(1.2)
 
-    l = struct.unpack('<H', client.readRegisters([args.board_id], [0x300a], [1])[0])[0]
-    while l == 0:
+    while 1:
         l = struct.unpack('<H', client.readRegisters([args.board_id], [0x300a], [1])[0])[0]
+        if l != 0:
+            break
         time.sleep(0.1)
+
+    # Reset the command mode so we're not still spinning/burning current
+    client.writeRegisters([args.board_id], [0x2000], [1], [struct.pack('<B', 1)])  # Set control mode to raw phase current
+
     arr = []
     for i in range(0, l, num_recorder_elements):
         # Grab the recorder data
-        a = (struct.unpack("<" + str(num_recorder_elements) + "f", client.readRegisters([args.board_id], [0x8000 + i], [num_recorder_elements])[0]))
+        regval = client.readRegisters([args.board_id], [0x8000 + i], [num_recorder_elements])
+        if not regval[0]:
+            print("Skipping %u"%i)
+            continue
+        a = (struct.unpack("<" + str(num_recorder_elements) + "f", regval[0]))
         arr += [a]
-    
+
+    print("Array has %u elements"%len(arr))
+    print("Array[0]: ",arr[0])
     
     if args.file_name:
-        with open(args.file_name, 'wb') as file:
+        with open(args.file_name, 'wb+') as file:
             pickle.dump(arr, file)
         print("dumped data to file " + args.file_name)
     else:

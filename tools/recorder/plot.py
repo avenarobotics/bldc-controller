@@ -11,17 +11,21 @@ data = []
 with open(sys.argv[1], 'rb') as file:
     data = pickle.load(file)
 
-length = len(data) // num_channels
+print("len(data) = %u"%len(data))
+print("data[0]", data[0])
 
-ia = [data[i * num_channels] for i in range(length)]
-ib = [data[i * num_channels + 1] for i in range(length)]
-ic = [data[i * num_channels + 2] for i in range(length)]
-va = [data[i * num_channels + 3] for i in range(length)]
-vb = [data[i * num_channels + 4] for i in range(length)]
-vc = [data[i * num_channels + 5] for i in range(length)]
-vin = [data[i * num_channels + 6] for i in range(length)]
-angle = [data[i * num_channels + 7] for i in range(length)]
-vel = [data[i * num_channels + 8] for i in range(length)]
+length = len(data)
+
+ia    = [data[i][0] for i in range(length)]
+ib    = [data[i][1] for i in range(length)]
+ic    = [data[i][2] for i in range(length)]
+va    = [data[i][3] for i in range(length)]
+vb    = [data[i][4] for i in range(length)]
+vc    = [data[i][5] for i in range(length)]
+vin   = [data[i][6] for i in range(length)]
+angle = [data[i][7] for i in range(length)]
+vel   = [data[i][8] for i in range(length)]
+
 
 plt.plot(ia)
 plt.xlabel('sample')
