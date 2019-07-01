@@ -14,6 +14,14 @@
 #include "constants.h"
 #include "helper.h"
 
+#define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
+#define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
+#define BLU_ON  palWritePad(GPIOA, GPIOA_LED_B, false)
+
+#define RED_OFF palWritePad(GPIOA, GPIOA_LED_R, true)
+#define GRN_OFF palWritePad(GPIOA, GPIOA_LED_G, true)
+#define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
+
 namespace motor_driver {
 
 static systime_t last_comms_activity_time = 0;
@@ -109,7 +117,9 @@ static msg_t sensorThreadRun(void *arg) {
     results.xl_y = xl[1];
     results.xl_z = xl[2];
     results.temperature = temperature;
+    GRN_OFF;
     chThdSleepMilliseconds(100);
+    GRN_ON;
   }
 
   return CH_SUCCESS;
@@ -208,24 +218,6 @@ extern "C" {
       case 0:
         break;
       case 1:
-        palWritePad(GPIOA, GPIOA_LED_R, true);
-        break;
-      case 2:
-        palWritePad(GPIOA, GPIOA_LED_G, true);
-        break;
-      case 3:
-        palWritePad(GPIOA, GPIOA_LED_B, true);
-        break;
-      case 4:
-        break;
-    }
-  }
-
-  void hack_led_off(uint8_t i) {
-    switch (i) {
-      case 0:
-        break;
-      case 1:
         palWritePad(GPIOA, GPIOA_LED_R, false);
         break;
       case 2:
@@ -238,12 +230,30 @@ extern "C" {
         break;
     }
   }
-  msg_t (*thread_callback_table[5])(void*) {
-    motor_driver::blinkerThreadRun,  
-    motor_driver::commsThreadRun,    
-    motor_driver::sensorThreadRun,   
-    motor_driver::controlThreadRun,  
-    motor_driver::watchdogThreadRun, 
+
+  void hack_led_off(uint8_t i) {
+    switch (i) {
+      case 0:
+        break;
+      case 1:
+        palWritePad(GPIOA, GPIOA_LED_R, true);
+        break;
+      case 2:
+        palWritePad(GPIOA, GPIOA_LED_G, true);
+        break;
+      case 3:
+        palWritePad(GPIOA, GPIOA_LED_B, true);
+        break;
+      case 4:
+        break;
+    }
+  }
+  stkalign_t* thread_wa_table[5] {
+    motor_driver::blinker_thread_wa,  
+    motor_driver::comms_thread_wa,    
+    motor_driver::sensor_thread_wa,   
+    motor_driver::control_thread_wa,  
+    motor_driver::watchdog_thread_wa, 
   };
 }
 

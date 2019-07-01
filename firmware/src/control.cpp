@@ -70,6 +70,13 @@ void resumeInnerControlLoop() {
     chSysUnlockFromIsr();
   }
 }
+#define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
+#define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
+#define BLU_ON  palWritePad(GPIOA, GPIOA_LED_B, false)
+
+#define RED_OFF palWritePad(GPIOA, GPIOA_LED_R, true)
+#define GRN_OFF palWritePad(GPIOA, GPIOA_LED_G, true)
+#define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
 
 void runInnerControlLoop() {
   control_thread_ptr = chThdSelf();
@@ -85,13 +92,17 @@ void runInnerControlLoop() {
     /*
      * Wait for resumeInnerControlLoop to be called
      */
+    BLU_OFF;
     chEvtWaitAny((flagsmask_t)1);
+    BLU_ON;
 
     // If there is no fault, enable the motors.
     if (!parameters.gate_active && !parameters.gate_fault) {
       gate_driver.enableGates();
       parameters.gate_active = true;
+      BLU_OFF;
       chThdSleepMicroseconds(500);
+      BLU_ON;
     }
 
     // If there is a fault, disable the motors.
@@ -99,7 +110,9 @@ void runInnerControlLoop() {
       gate_driver.disableGates();
       brakeMotor();
       parameters.gate_active = false;
+      BLU_OFF;
       chThdSleepMicroseconds(500);
+      BLU_ON;
     }
 
     if (calibration.control_timeout != 0 && (chTimeNow() - last_control_timeout_reset) >= MS2ST(calibration.control_timeout)) {

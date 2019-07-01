@@ -384,9 +384,9 @@
                                      PIN_PUPDR_FLOATING(GPIOA_SWDIO) |      \
                                      PIN_PUPDR_FLOATING(GPIOA_SWCLK) |      \
                                      PIN_PUPDR_FLOATING(GPIOA_ENC_CSN))
-#define VAL_GPIOA_ODR               (PIN_ODR_LOW(GPIOA_LED_R) |             \
-                                     PIN_ODR_LOW(GPIOA_LED_B) |             \
-                                     PIN_ODR_LOW(GPIOA_LED_G) |             \
+#define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED_R) |             \
+                                     PIN_ODR_HIGH(GPIOA_LED_B) |             \
+                                     PIN_ODR_HIGH(GPIOA_LED_G) |             \
                                      PIN_ODR_HIGH(GPIOA_LED_Y) |            \
                                      PIN_ODR_HIGH(GPIOA_PIN4) |             \
                                      PIN_ODR_HIGH(GPIOA_PIN5) |             \

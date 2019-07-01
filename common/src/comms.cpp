@@ -815,8 +815,18 @@ void startComms() {
 #endif
 }
 
+#define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
+#define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
+#define BLU_ON  palWritePad(GPIOA, GPIOA_LED_B, false)
+
+#define RED_OFF palWritePad(GPIOA, GPIOA_LED_R, true)
+#define GRN_OFF palWritePad(GPIOA, GPIOA_LED_G, true)
+#define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
+
 void runComms() {
+  RED_OFF;
   comms_endpoint.receive(); // Blocks until packet is received
+  RED_ON;
 
   if (!comms_endpoint.hasReceiveError()) {
     /* Received valid datagram */

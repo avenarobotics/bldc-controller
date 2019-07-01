@@ -27,7 +27,7 @@ if __name__ == '__main__':
     parser.set_defaults(baud_rate=COMM_DEFAULT_BAUD_RATE, offset=COMM_BOOTLOADER_OFFSET)
     args = parser.parse_args()
 
-    ser = serial.Serial(port=args.serial, baudrate=args.baud_rate, timeout=0.004)
+    ser = serial.Serial(port=args.serial, baudrate=args.baud_rate, timeout=0.01)
     
     board_ids = [int(bid) for bid in args.board_ids.split(',')]
 
@@ -78,6 +78,6 @@ if __name__ == '__main__':
             pass
         except struct.error:
             pass
-        time.sleep(0.1)
+        #time.sleep(0.1)
     
     print("Exiting.")
