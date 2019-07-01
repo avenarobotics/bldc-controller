@@ -119,6 +119,7 @@ void runInnerControlLoop() {
       brakeMotor();
     } 
 
+    chMtxLock(&var_access_mutex);
     estimateState();
 
     runPositionControl();
@@ -126,6 +127,7 @@ void runInnerControlLoop() {
     runVelocityControl();
 
     runCurrentControl();
+    chMtxUnlock();
   }
 }
 

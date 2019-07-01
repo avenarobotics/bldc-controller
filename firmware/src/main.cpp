@@ -13,6 +13,7 @@
 #include "state.h"
 #include "constants.h"
 #include "helper.h"
+#include "chmtx.h"
 
 #define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
 #define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
@@ -23,6 +24,8 @@
 #define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
 
 namespace motor_driver {
+
+MUTEX_DECL(var_access_mutex);
 
 static systime_t last_comms_activity_time = 0;
 
@@ -82,7 +85,7 @@ static msg_t blinkerThreadRun(void *arg) {
 /*
  * Communications thread
  */
-
+//  RED LED
 static WORKING_AREA(comms_thread_wa, 512);
 static msg_t commsThreadRun(void *arg) {
   (void)arg;
@@ -101,7 +104,7 @@ static msg_t commsThreadRun(void *arg) {
 /*
  * Sensor thread
  */
-
+// GREEN LED
 static WORKING_AREA(sensor_thread_wa, 512);
 static msg_t sensorThreadRun(void *arg) {
   (void)arg;
@@ -113,10 +116,12 @@ static msg_t sensorThreadRun(void *arg) {
     float temperature;
     acc_gyr.Get_Acc(xl);
     temp_sensor.getTemperature(&temperature);
+    chMtxLock(&var_access_mutex);
     results.xl_x = xl[0];
     results.xl_y = xl[1];
     results.xl_z = xl[2];
     results.temperature = temperature;
+    chMtxUnlock();
     GRN_OFF;
     chThdSleepMilliseconds(100);
     GRN_ON;
@@ -128,7 +133,7 @@ static msg_t sensorThreadRun(void *arg) {
 /*
  * Control thread
  */
-
+// BLUE LED
 static WORKING_AREA(control_thread_wa, 512);
 static msg_t controlThreadRun(void *arg) {
   (void)arg;

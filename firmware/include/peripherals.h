@@ -10,6 +10,7 @@
 #include "MCP9808.h"
 #include "LSM6DS3Sensor.h"
 #include "constants.h"
+#include "chmtx.h"
 
 extern SerialUSBDriver SDU1;
 
@@ -36,6 +37,8 @@ extern volatile adcsample_t *ivsense_adc_samples_ptr;
 extern volatile size_t ivsense_adc_samples_count;
 
 extern adcsample_t ivsense_sample_buf[ivsense_channel_count * ivsense_sample_buf_depth];
+
+extern Mutex var_access_mutex;
 
 void initPeripherals();
 
