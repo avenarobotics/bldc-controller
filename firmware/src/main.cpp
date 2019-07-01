@@ -159,14 +159,6 @@ static msg_t watchdogThreadRun(void *arg) {
   return CH_SUCCESS; // Should never get here
 }
 
-msg_t (*thread_callback_table[5])(void*) {
-  blinkerThreadRun,  
-  commsThreadRun,    
-  sensorThreadRun,   
-  controlThreadRun,  
-  watchdogThreadRun, 
-};
-
 int main(void) {
   // Start RTOS
   halInit();
@@ -210,6 +202,14 @@ int main(void) {
 extern "C" void HardFault_Handler(void) {
   flashJumpApplication((uint32_t)motor_driver::firmware_ptr);
 }
+
+msg_t (*thread_callback_table[5])(void*) {
+  motor_driver::blinkerThreadRun,  
+  motor_driver::commsThreadRun,    
+  motor_driver::sensorThreadRun,   
+  motor_driver::controlThreadRun,  
+  motor_driver::watchdogThreadRun, 
+};
 
 // FIXME: hack
 int main(void) {
