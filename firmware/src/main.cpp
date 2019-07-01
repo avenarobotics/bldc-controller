@@ -159,6 +159,14 @@ static msg_t watchdogThreadRun(void *arg) {
   return CH_SUCCESS; // Should never get here
 }
 
+msg_t (*thread_callback_table)(void*)[5] {
+  blinkerThreadRun,  
+  commsThreadRun,    
+  sensorThreadRun,   
+  controlThreadRun,  
+  watchdogThreadRun, 
+}
+
 int main(void) {
   // Start RTOS
   halInit();
@@ -183,10 +191,10 @@ int main(void) {
   comms_protocol_fsm.setActivityCallback(&comms_activity_callback);
 
   // Start threads
-  chThdCreateStatic(blinker_thread_wa, sizeof(blinker_thread_wa), LOWPRIO, blinkerThreadRun, NULL);
-  chThdCreateStatic(comms_thread_wa, sizeof(comms_thread_wa), HIGHPRIO, commsThreadRun, NULL);
-  chThdCreateStatic(sensor_thread_wa, sizeof(sensor_thread_wa), LOWPRIO, sensorThreadRun, NULL);
-  chThdCreateStatic(control_thread_wa, sizeof(control_thread_wa), NORMALPRIO, controlThreadRun, NULL);
+  chThdCreateStatic(blinker_thread_wa, sizeof(blinker_thread_wa), LOWPRIO,    blinkerThreadRun,  NULL);
+  chThdCreateStatic(comms_thread_wa, sizeof(comms_thread_wa), HIGHPRIO,       commsThreadRun,    NULL);
+  chThdCreateStatic(sensor_thread_wa, sizeof(sensor_thread_wa), LOWPRIO,      sensorThreadRun,   NULL);
+  chThdCreateStatic(control_thread_wa, sizeof(control_thread_wa), NORMALPRIO, controlThreadRun,  NULL);
   chThdCreateStatic(watchdog_thread_wa, sizeof(watchdog_thread_wa), HIGHPRIO, watchdogThreadRun, NULL);
 
   // Wait forever
