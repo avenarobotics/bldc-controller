@@ -24,27 +24,27 @@
       <pin0
         ID="LED_R"
         Type="PushPull"
-        Level="High"
+        Level="Low"
         Speed="Maximum"
         Resistor="Floating"
-        Mode="Alternate"
-        Alternate="2" />
+        Mode="Output"
+        Alternate="0" />
       <pin1
         ID="LED_B"
         Type="PushPull"
-        Level="High"
+        Level="Low"
         Speed="Maximum"
         Resistor="Floating"
-        Mode="Alternate"
-        Alternate="2" />
+        Mode="Output"
+        Alternate="0" />
       <pin2
         ID="LED_G"
         Type="PushPull"
-        Level="High"
+        Level="Low"
         Speed="Maximum"
         Resistor="Floating"
-        Mode="Alternate"
-        Alternate="2" />
+        Mode="Output"
+        Alternate="0" />
       <pin3
         ID="LED_Y"
         Type="PushPull"

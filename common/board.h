@@ -303,9 +303,9 @@
 /*
  * GPIOA setup:
  *
- * PA0  - LED_R                     (alternate 2).
- * PA1  - LED_B                     (alternate 2).
- * PA2  - LED_G                     (alternate 2).
+ * PA0  - LED_R                     (output pushpull maximum).
+ * PA1  - LED_B                     (output pushpull maximum).
+ * PA2  - LED_G                     (output pushpull maximum).
  * PA3  - LED_Y                     (output pushpull maximum).
  * PA4  - PIN4                      (input pullup).
  * PA5  - PIN5                      (input pullup).
@@ -320,9 +320,9 @@
  * PA14 - SWCLK                     (alternate 0).
  * PA15 - ENC_CSN                   (output pushpull maximum).
  */
-#define VAL_GPIOA_MODER             (PIN_MODE_ALTERNATE(GPIOA_LED_R) |      \
-                                     PIN_MODE_ALTERNATE(GPIOA_LED_B) |      \
-                                     PIN_MODE_ALTERNATE(GPIOA_LED_G) |      \
+#define VAL_GPIOA_MODER             (PIN_MODE_OUTPUT(GPIOA_LED_R) |         \
+                                     PIN_MODE_OUTPUT(GPIOA_LED_B) |         \
+                                     PIN_MODE_OUTPUT(GPIOA_LED_G) |         \
                                      PIN_MODE_OUTPUT(GPIOA_LED_Y) |         \
                                      PIN_MODE_INPUT(GPIOA_PIN4) |           \
                                      PIN_MODE_INPUT(GPIOA_PIN5) |           \
@@ -384,9 +384,9 @@
                                      PIN_PUPDR_FLOATING(GPIOA_SWDIO) |      \
                                      PIN_PUPDR_FLOATING(GPIOA_SWCLK) |      \
                                      PIN_PUPDR_FLOATING(GPIOA_ENC_CSN))
-#define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED_R) |            \
-                                     PIN_ODR_HIGH(GPIOA_LED_B) |            \
-                                     PIN_ODR_HIGH(GPIOA_LED_G) |            \
+#define VAL_GPIOA_ODR               (PIN_ODR_LOW(GPIOA_LED_R) |             \
+                                     PIN_ODR_LOW(GPIOA_LED_B) |             \
+                                     PIN_ODR_LOW(GPIOA_LED_G) |             \
                                      PIN_ODR_HIGH(GPIOA_LED_Y) |            \
                                      PIN_ODR_HIGH(GPIOA_PIN4) |             \
                                      PIN_ODR_HIGH(GPIOA_PIN5) |             \
@@ -400,9 +400,9 @@
                                      PIN_ODR_HIGH(GPIOA_SWDIO) |            \
                                      PIN_ODR_HIGH(GPIOA_SWCLK) |            \
                                      PIN_ODR_HIGH(GPIOA_ENC_CSN))
-#define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_LED_R, 2U) |         \
-                                     PIN_AFIO_AF(GPIOA_LED_B, 2U) |         \
-                                     PIN_AFIO_AF(GPIOA_LED_G, 2U) |         \
+#define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_LED_R, 0U) |         \
+                                     PIN_AFIO_AF(GPIOA_LED_B, 0U) |         \
+                                     PIN_AFIO_AF(GPIOA_LED_G, 0U) |         \
                                      PIN_AFIO_AF(GPIOA_LED_Y, 0U) |         \
                                      PIN_AFIO_AF(GPIOA_PIN4, 0U) |          \
                                      PIN_AFIO_AF(GPIOA_PIN5, 0U) |          \
