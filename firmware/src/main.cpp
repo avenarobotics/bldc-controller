@@ -239,6 +239,14 @@ void hack_led_off(uint8_t i) {
   }
 }
 
+msg_t (*thread_callback_table[5])(void*) {
+  motor_driver::blinkerThreadRun,  
+  motor_driver::commsThreadRun,    
+  motor_driver::sensorThreadRun,   
+  motor_driver::controlThreadRun,  
+  motor_driver::watchdogThreadRun, 
+};
+
 // FIXME: hack
 int main(void) {
   return motor_driver::main();
