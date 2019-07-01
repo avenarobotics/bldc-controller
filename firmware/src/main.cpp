@@ -202,50 +202,51 @@ int main(void) {
 extern "C" void HardFault_Handler(void) {
   flashJumpApplication((uint32_t)motor_driver::firmware_ptr);
 }
-
-void hack_led_on(uint8_t i) {
-  switch (i) {
-    case 0:
-      break;
-    case 1:
-      palWritePad(GPIOA, GPIOA_LED_R, true);
-      break;
-    case 2:
-      palWritePad(GPIOA, GPIOA_LED_G, true);
-      break;
-    case 3:
-      palWritePad(GPIOA, GPIOA_LED_B, true);
-      break;
-    case 4:
-      break;
+extern "C" {
+  void hack_led_on(uint8_t i) {
+    switch (i) {
+      case 0:
+        break;
+      case 1:
+        palWritePad(GPIOA, GPIOA_LED_R, true);
+        break;
+      case 2:
+        palWritePad(GPIOA, GPIOA_LED_G, true);
+        break;
+      case 3:
+        palWritePad(GPIOA, GPIOA_LED_B, true);
+        break;
+      case 4:
+        break;
+    }
   }
+
+  void hack_led_off(uint8_t i) {
+    switch (i) {
+      case 0:
+        break;
+      case 1:
+        palWritePad(GPIOA, GPIOA_LED_R, false);
+        break;
+      case 2:
+        palWritePad(GPIOA, GPIOA_LED_G, false);
+        break;
+      case 3:
+        palWritePad(GPIOA, GPIOA_LED_B, false);
+        break;
+      case 4:
+        break;
+    }
+  }
+  msg_t (*thread_callback_table[5])(void*) {
+    motor_driver::blinkerThreadRun,  
+    motor_driver::commsThreadRun,    
+    motor_driver::sensorThreadRun,   
+    motor_driver::controlThreadRun,  
+    motor_driver::watchdogThreadRun, 
+  };
 }
 
-void hack_led_off(uint8_t i) {
-  switch (i) {
-    case 0:
-      break;
-    case 1:
-      palWritePad(GPIOA, GPIOA_LED_B, false);
-      break;
-    case 2:
-      palWritePad(GPIOA, GPIOA_LED_B, false);
-      break;
-    case 3:
-      palWritePad(GPIOA, GPIOA_LED_B, false);
-      break;
-    case 4:
-      break;
-  }
-}
-
-msg_t (*thread_callback_table[5])(void*) {
-  motor_driver::blinkerThreadRun,  
-  motor_driver::commsThreadRun,    
-  motor_driver::sensorThreadRun,   
-  motor_driver::controlThreadRun,  
-  motor_driver::watchdogThreadRun, 
-};
 
 // FIXME: hack
 int main(void) {
