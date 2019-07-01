@@ -159,13 +159,13 @@ static msg_t watchdogThreadRun(void *arg) {
   return CH_SUCCESS; // Should never get here
 }
 
-msg_t (*thread_callback_table)(void*)[5] {
+msg_t (*thread_callback_table[5])(void*) {
   blinkerThreadRun,  
   commsThreadRun,    
   sensorThreadRun,   
   controlThreadRun,  
   watchdogThreadRun, 
-}
+};
 
 int main(void) {
   // Start RTOS
