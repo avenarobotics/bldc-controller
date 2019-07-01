@@ -73,6 +73,10 @@ inline float adcValueToCurrent(float adc_value) {
   return (ivsense_count_zero_current - adc_value) * ivsense_current_per_count;
 }
 
+static uint16_t ledPWMPulseWidthFromIntensity(uint8_t intensity) {
+  return led_gamma_table[intensity];
+}
+
 } // namespace motor_driver
 
 #endif /* _PERIPHERALS_H_ */

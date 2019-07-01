@@ -192,10 +192,6 @@ void startPeripherals() {
   PWMD1.tim->CR1 |= TIM_CR1_CEN;
 }
 
-static uint16_t ledPWMPulseWidthFromIntensity(uint8_t intensity) {
-  return led_gamma_table[intensity];
-}
-
 void setStatusLEDColor(uint8_t red, uint8_t green, uint8_t blue) {
   pwmEnableChannel(&PWMD5, 0, ledPWMPulseWidthFromIntensity(red));
   pwmEnableChannel(&PWMD5, 2, ledPWMPulseWidthFromIntensity(green));

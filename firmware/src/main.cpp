@@ -183,7 +183,7 @@ int main(void) {
   comms_protocol_fsm.setActivityCallback(&comms_activity_callback);
 
   // Start threads
-  chThdCreateStatic(blinker_thread_wa, sizeof(blinker_thread_wa), LOWPRIO, blinkerThreadRun, NULL);
+  //chThdCreateStatic(blinker_thread_wa, sizeof(blinker_thread_wa), LOWPRIO, blinkerThreadRun, NULL);
   chThdCreateStatic(comms_thread_wa, sizeof(comms_thread_wa), HIGHPRIO, commsThreadRun, NULL);
   chThdCreateStatic(sensor_thread_wa, sizeof(sensor_thread_wa), LOWPRIO, sensorThreadRun, NULL);
   chThdCreateStatic(control_thread_wa, sizeof(control_thread_wa), NORMALPRIO, controlThreadRun, NULL);
@@ -201,6 +201,42 @@ int main(void) {
 
 extern "C" void HardFault_Handler(void) {
   flashJumpApplication((uint32_t)motor_driver::firmware_ptr);
+}
+
+void hack_led_on(uint8_t i) {
+  switch (i) {
+    case 0:
+      break;
+    case 1:
+      pwmEnableChannel(&PWMD5, 0, motor_driver::ledPWMPulseWidthFromIntensity(255));
+      break;
+    case 2:
+      pwmEnableChannel(&PWMD5, 2, motor_driver::ledPWMPulseWidthFromIntensity(255));
+      break;
+    case 3:
+      pwmEnableChannel(&PWMD5, 1, motor_driver::ledPWMPulseWidthFromIntensity(255));
+      break;
+    case 4:
+      break;
+  }
+}
+
+void hack_led_off(uint8_t i) {
+  switch (i) {
+    case 0:
+      break;
+    case 1:
+      pwmEnableChannel(&PWMD5, 0, motor_driver::ledPWMPulseWidthFromIntensity(0));
+      break;
+    case 2:
+      pwmEnableChannel(&PWMD5, 2, motor_driver::ledPWMPulseWidthFromIntensity(0));
+      break;
+    case 3:
+      pwmEnableChannel(&PWMD5, 1, motor_driver::ledPWMPulseWidthFromIntensity(0));
+      break;
+    case 4:
+      break;
+  }
 }
 
 // FIXME: hack
