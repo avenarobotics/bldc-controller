@@ -203,13 +203,26 @@ class LSM6DS3Sensor
      * @param  NumByteToRead: number of bytes to be read.
      * @retval 0 if ok, an error code otherwise.
      */
+
+#define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
+#define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
+#define BLU_ON  palWritePad(GPIOA, GPIOA_LED_B, false)
+
+#define RED_OFF palWritePad(GPIOA, GPIOA_LED_R, true)
+#define GRN_OFF palWritePad(GPIOA, GPIOA_LED_G, true)
+#define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
+
     uint8_t IO_Read(uint8_t* pBuffer, uint8_t RegisterAddr, uint16_t NumByteToRead)
     {
       uint8_t add = (uint8_t) ((address >> 1) & 0x7F);
       systime_t tmo = MS2ST(3);
       msg_t status = RDY_OK;
+
+      GRN_OFF;
       i2cAcquireBus(dev_i2c);
       status = i2cMasterTransmitTimeout(dev_i2c, add, &RegisterAddr, 1, pBuffer, NumByteToRead, tmo);
+      GRN_ON;
+
       i2cReleaseBus(dev_i2c);
       if (status == RDY_OK) {
         return 0;
@@ -235,11 +248,18 @@ class LSM6DS3Sensor
       }
       systime_t tmo = MS2ST(3);
       msg_t status = RDY_OK;
+
+      GRN_OFF;
       i2cAcquireBus(dev_i2c);
       status = i2cMasterTransmitTimeout(dev_i2c, add, txbuf, NumByteToWrite + 1, pBuffer, 0, tmo);
+      GRN_ON;
+
       i2cReleaseBus(dev_i2c);
+
       if (status == RDY_OK) {
+        GRN_ON;
         return 0;
+        GRN_ON;
       } else {
         return status;
       }

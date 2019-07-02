@@ -27,11 +27,21 @@ bool MCP9808::checkID() {
   return true;
 }
 
+#define RED_ON  palWritePad(GPIOA, GPIOA_LED_R, false)
+#define GRN_ON  palWritePad(GPIOA, GPIOA_LED_G, false)
+#define BLU_ON  palWritePad(GPIOA, GPIOA_LED_B, false)
+
+#define RED_OFF palWritePad(GPIOA, GPIOA_LED_R, true)
+#define GRN_OFF palWritePad(GPIOA, GPIOA_LED_G, true)
+#define BLU_OFF palWritePad(GPIOA, GPIOA_LED_B, true)
+
 bool MCP9808::receive(uint16_t addr, uint8_t reg, uint8_t* data, size_t size) {
   systime_t tmo = MS2ST(4); // 4 millisecond timeout
-  i2cAcquireBus(i2c_driver_);
 
+  GRN_OFF;
+  i2cAcquireBus(i2c_driver_);
   msg_t status = i2cMasterTransmitTimeout(i2c_driver_, addr, &reg, 1, data, size, tmo);
+  GRN_ON;
 
   i2cReleaseBus(i2c_driver_);
   return status == RDY_OK;

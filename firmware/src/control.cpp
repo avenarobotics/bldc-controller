@@ -120,17 +120,24 @@ void runInnerControlLoop() {
     } 
 
     chMtxLock(&var_access_mutex);
+    BLU_OFF;
+    BLU_ON;
+    // 11uS
     estimateState();
 
     runPositionControl();
 
     runVelocityControl();
 
+    BLU_OFF;
+    BLU_ON;
+    // 22uS
     runCurrentControl();
     chMtxUnlock();
   }
 }
 
+#pragma GCC optimize ("O3")
 void estimateState() {
   /*
    * Get current encoder position and velocity
@@ -179,6 +186,8 @@ void estimateState() {
    * 2) average arrays are not initialized to zero
    */
 
+  RED_ON;
+  RED_OFF;
   // Subtract old values before storing/adding new values
   // Start doing this after rolling over
   if (rolladc.vin[rolladc.count] != 0) {
@@ -215,6 +224,8 @@ void estimateState() {
   results.corrected_ib = results.average_ib - calibration.ib_offset;
   results.corrected_ic = results.average_ic - calibration.ic_offset;
 
+  RED_ON;
+  RED_OFF;
   //if (results.duty_a > results.duty_b && results.duty_a > results.duty_c) {
   //  results.corrected_ia = -(results.corrected_ib + results.corrected_ic);
   //} else if (results.duty_b > results.duty_c) {
@@ -300,6 +311,8 @@ void runCurrentControl() {
 
     float id, iq;
     transformPark(ialpha, ibeta, cos_theta, sin_theta, id, iq);
+    BLU_OFF;
+    BLU_ON;
 
     pid_id.setGains(calibration.foc_kp_d, calibration.foc_ki_d, 0.0f);
     pid_iq.setGains(calibration.foc_kp_q, calibration.foc_ki_q, 0.0f);
@@ -334,11 +347,18 @@ void runCurrentControl() {
       vq = results.iq_output * calibration.motor_resistance; // + results.hf_rotor_vel * calibration.motor_torque_const;
     }
 
+    GRN_ON;
+    GRN_OFF;
     float mag = std::sqrt(std::pow(vd, 2) + std::pow(vq, 2));
+    GRN_ON;
+    GRN_OFF;
+
     float div = std::max(results.average_vin, mag);
     float vd_norm = vd / div;
     float vq_norm = vq / div;
 
+    RED_ON;
+    RED_OFF;
     float valpha_norm, vbeta_norm;
     transformInversePark(vd_norm, vq_norm, cos_theta, sin_theta, valpha_norm, vbeta_norm);
 
@@ -348,6 +368,9 @@ void runCurrentControl() {
 
     modulator.computeDutyCycles(valpha_norm, vbeta_norm, 
                                 results.duty_a, results.duty_b, results.duty_c);
+
+    RED_ON;
+    RED_OFF;
 
     if (parameters.gate_active) {
       results.duty_a = results.duty_a * max_duty_cycle;
@@ -359,9 +382,14 @@ void runCurrentControl() {
       results.duty_c = 0.0f;
     }
 
+    BLU_OFF;
+    BLU_ON;
     gate_driver.setPWMDutyCycle(0, results.duty_a);
     gate_driver.setPWMDutyCycle(1, results.duty_b);
     gate_driver.setPWMDutyCycle(2, results.duty_c);
+    BLU_OFF;
+    BLU_ON;
+
 
     results.foc_d_current = id;
     results.foc_q_current = iq;
