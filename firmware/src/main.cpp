@@ -217,51 +217,6 @@ int main(void) {
 extern "C" void HardFault_Handler(void) {
   flashJumpApplication((uint32_t)motor_driver::firmware_ptr);
 }
-extern "C" {
-  void hack_led_on(uint8_t i) {
-    switch (i) {
-      case 0:
-        break;
-      case 1:
-        palWritePad(GPIOA, GPIOA_LED_R, false);
-        break;
-      case 2:
-        palWritePad(GPIOA, GPIOA_LED_G, false);
-        break;
-      case 3:
-        palWritePad(GPIOA, GPIOA_LED_B, false);
-        break;
-      case 4:
-        break;
-    }
-  }
-
-  void hack_led_off(uint8_t i) {
-    switch (i) {
-      case 0:
-        break;
-      case 1:
-        palWritePad(GPIOA, GPIOA_LED_R, true);
-        break;
-      case 2:
-        palWritePad(GPIOA, GPIOA_LED_G, true);
-        break;
-      case 3:
-        palWritePad(GPIOA, GPIOA_LED_B, true);
-        break;
-      case 4:
-        break;
-    }
-  }
-  stkalign_t* thread_wa_table[5] {
-    motor_driver::blinker_thread_wa,  
-    motor_driver::comms_thread_wa,    
-    motor_driver::sensor_thread_wa,   
-    motor_driver::control_thread_wa,  
-    motor_driver::watchdog_thread_wa, 
-  };
-}
-
 
 // FIXME: hack
 int main(void) {
