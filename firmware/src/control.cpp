@@ -143,7 +143,7 @@ void runInnerControlLoop() {
   }
 }
 
-#define BLINK  BLU_OFF; BLU_OFF; BLU_ON; GRN_ON; GRN_ON; GRN_OFF
+#define BLINK  GRN_ON; GRN_ON; GRN_OFF //BLU_OFF; BLU_OFF; BLU_ON;
 
 void estimateState() {
   /*
