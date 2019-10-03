@@ -51,16 +51,17 @@ if __name__ == '__main__':
 
             # Velocity controller is not used right now. Tunings need to be adjusted.
             client.setVelocityKp([board_id], [0.5])
-            client.setVelocityKd([board_id], [0.01])
 
             if torque_const > large_motor_tc - 0.01:
                 # Big motors
                 client.setPositionKp([board_id], [1.0])
                 client.setPositionKd([board_id], [1000.0])
+                client.setPositionKi([board_id], [0.001])
             else:
                 # Small motors
                 client.setPositionKp([board_id], [0.5])
                 client.setPositionKd([board_id], [100.0])
+                client.setPositionKi([board_id], [0.001])
 
             # Modifying Limits
             client.setCurrentLimit([board_id], [2.0])
