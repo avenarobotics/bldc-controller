@@ -33,7 +33,7 @@ size_t commsRegAccessHandler(comm_addr_t start_addr, size_t reg_count, uint8_t *
       handleVarAccess(state::calibration.enc_ang_corr_table_values[addr - 0x1200], buf, index, buf_size, access_type, errors);
     } else {
       switch (addr) {
-        case 0x0000: // Register Map Version
+        case COMM_REG_SYS_MAP_VERSION: // Register Map Version
           break;
         case 0x0001: // Board ID
           break;
