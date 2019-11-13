@@ -60,31 +60,40 @@ constexpr comm_addr_t COMM_REG_SYS_CLEAR_CALIBRATION = 0x0005;
 constexpr comm_addr_t COMM_REG_CAL_REV_START = 0x1000;
 constexpr comm_addr_t COMM_REG_CAL_EREVS_PER_MREV = 0x1001;
 constexpr comm_addr_t COMM_REG_CAL_INV_PHASES = 0x1002;
+
 constexpr comm_addr_t COMM_REG_CAL_DI_KP = 0x1003;
 constexpr comm_addr_t COMM_REG_CAL_DI_KI = 0x1004;
 constexpr comm_addr_t COMM_REG_CAL_QI_KP = 0x1005;
 constexpr comm_addr_t COMM_REG_CAL_QI_KI = 0x1006;
+
 constexpr comm_addr_t COMM_REG_CAL_V_KP = 0x1007;
 constexpr comm_addr_t COMM_REG_CAL_V_KI = 0x1008;
 constexpr comm_addr_t COMM_REG_CAL_P_KP = 0x1009;
 constexpr comm_addr_t COMM_REG_CAL_P_KI = 0x100a;
+
 constexpr comm_addr_t COMM_REG_CAL_I_LIMIT = 0x1010;
 constexpr comm_addr_t COMM_REG_CAL_T_LIMIT = 0x1011;
 constexpr comm_addr_t COMM_REG_CAL_V_LIMIT = 0x1012;
+
 constexpr comm_addr_t COMM_REG_CAL_POS_L_LIMIT = 0x1013;
 constexpr comm_addr_t COMM_REG_CAL_POS_U_LIMIT = 0x1014;
 constexpr comm_addr_t COMM_REG_CAL_POS_OFFSET = 0x1015;
+
 constexpr comm_addr_t COMM_REG_CAL_MOTOR_R = 0x1020; // Resistance
 constexpr comm_addr_t COMM_REG_CAL_MOTOR_H = 0x1021; // Inductance
 constexpr comm_addr_t COMM_REG_CAL_MOTOR_T = 0x1022; // Torque Constant
+
 constexpr comm_addr_t COMM_REG_CAL_WATCHDOG = 0x1030;
-constexpr comm_addr_t COMM_REG_CAL_V_FILTER = 0x1040;
-constexpr comm_addr_t COMM_REG_CAL_EAC_SCALE = 0x1100;
-constexpr comm_addr_t COMM_REG_CAL_EAC_OFFSET = 0x1101;
-constexpr comm_addr_t COMM_REG_CAL_EAC_TABLE = 0x1200;
+constexpr comm_addr_t COMM_REG_CAL_HF_V_FILTER = 0x1040;
+constexpr comm_addr_t COMM_REG_CAL_LF_V_FILTER = 0x1041;
+
 constexpr comm_addr_t COMM_REG_CAL_IA_OFF = 0x1050;
 constexpr comm_addr_t COMM_REG_CAL_IB_OFF = 0x1051;
 constexpr comm_addr_t COMM_REG_CAL_IC_OFF = 0x1052;
+
+constexpr comm_addr_t COMM_REG_CAL_EAC_SCALE = 0x1100;
+constexpr comm_addr_t COMM_REG_CAL_EAC_OFFSET = 0x1101;
+constexpr comm_addr_t COMM_REG_CAL_EAC_TABLE = 0x1200;
 
 // Volatile Registers (0x2***)
 constexpr comm_addr_t COMM_REG_VOL_CTRL_MODE = 0x2000;

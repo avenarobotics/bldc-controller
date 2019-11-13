@@ -49,8 +49,13 @@ struct Results {
   Results() {}
 };
 
+/* This value is used by the read/write calibration to 
+    determine how many bytes to allocate 
+   (UPDATE THIS WHENEVER ADDING/REMOVING CALIBRATION VALUES) */
+constexpr uint16_t num_calibrations = 29;
+constexpr uint16_t num_bytes_per_calib = 4;
+
 struct Calibration {
-  uint16_t start_sequence = consts::calib_ss;   // Start sequence to determine whether this is a valid calibration
   uint16_t erev_start = 0;                      // Encoder reading at the start of an electrical revolution
   uint8_t erevs_per_mrev = 1;                   // Electrical revolutions per mechanical revolution
   uint8_t flip_phases = false;                  // Phases A, B, C are arranged in clockwise instead of ccw order
@@ -147,6 +152,10 @@ void storeCalibration();
 void loadCalibration();
 
 void clearCalibration();
+
+void packCalibration(uint8_t* buf, const state::Calibration &calibration);
+
+bool unpackCalibration(const uint8_t* buf, state::Calibration &calibration);
 
 } // namespace state
 } // namespace motor_driver
