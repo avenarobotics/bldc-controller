@@ -5,7 +5,7 @@ import argparse
 import serial
 import time
 import numpy as np
-from scipy import signal as sps, stats, interpolate
+#from scipy import signal as sps, stats, interpolate
 import matplotlib.pyplot as plt
 
 from comms import *
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         except (ProtocolError, struct.error, TypeError):
             print("Missed packet")
 
-    f, axarr = plt.subplots(1, sharex=True)
+    #f, axarr = plt.subplots(1, sharex=True)
 
     ia = [e[0] for e in data]
     ib = [e[1] for e in data]
@@ -99,13 +99,23 @@ if __name__ == '__main__':
     set_phase_state(phase_state_list[-1])
     time.sleep(args.delay)
 
+    def get_angle(client, board_ids, delay, state):
+        success = False
+        while not success:
+            try:
+                set_phase_state(state)
+                time.sleep(delay)
+                raw_angle = client.getRawRotorPosition(board_ids)[0]
+                success = True
+            except:
+                pass
+
+        return raw_angle
+
     # Forward
     forward_raw_angles = []
     for i in range(args.max_steps):
-        set_phase_state(phase_state_list[i % 6])
-        time.sleep(args.delay)
-
-        raw_angle = client.getRawRotorPosition(board_ids)[0]
+        raw_angle = get_angle(client, board_ids, args.delay, phase_state_list[i % 6])
 
         if i > 4 and abs(forward_raw_angles[0] - raw_angle) < abs(forward_raw_angles[1] - forward_raw_angles[0]) / 3.0:
             break
@@ -121,10 +131,7 @@ if __name__ == '__main__':
     # Backward
     backward_raw_angles = []
     for i in range(step_count - 1, -1, -1):
-        set_phase_state(phase_state_list[i % 6])
-        time.sleep(args.delay)
-
-        raw_angle = client.getRawRotorPosition(board_ids)[0]
+        raw_angle = get_angle(client, board_ids, args.delay, phase_state_list[i % 6])
 
         backward_raw_angles.append(raw_angle)
 
